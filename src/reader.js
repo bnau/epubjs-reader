@@ -81,6 +81,9 @@ EPUBJS.Reader = function(bookPath, _options) {
 	}
 
 	this.rendition = book.renderTo("viewer", {
+		flow: 'paginated',
+		manager: 'continuous',
+		spread: 'always',
 		ignoreClass: "annotator-hl",
 		width: "100%",
 		height: "100%"
@@ -108,6 +111,17 @@ EPUBJS.Reader = function(bookPath, _options) {
 		this.rendition.on("keydown", reader.ReaderController.arrowKeys.bind(this));
 
 		this.rendition.on("selected", this.selectedRange.bind(this));
+
+		var stored = localStorage.getItem(book.key() + '-locations');
+		var pagesGeneration;
+		if (stored) {
+			pagesGeneration = Promise.resolve(book.locations.load(stored));
+		} else {
+			pagesGeneration = book.locations.generate(1024); // Generates CFI for every X characters (Characters per/page)
+		}
+		pagesGeneration.then(function() {
+			localStorage.setItem(book.key() + '-locations', book.locations.save());
+		})
 	}.bind(this)).then(function() {
 		reader.ReaderController.hideLoader();
 	}.bind(this));

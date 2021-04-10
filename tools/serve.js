@@ -43,6 +43,7 @@ function listen(port) {
 
   app.use(allowCrossDomain);
   app.use(staticServer);
+  app.use('/src', express.static(__dirname + '/../src/'));
 
   if(!logger) app.use(morgan('dev'))
 
