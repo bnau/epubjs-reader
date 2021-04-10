@@ -3,7 +3,8 @@ EPUBJS.reader.ReaderController = function(book) {
 			$divider = $("#divider"),
 			$loader = $("#loader"),
 			$next = $("#next"),
-			$prev = $("#prev");
+			$prev = $("#prev"),
+			$pages = $("#pages");
 	var reader = this;
 	var book = this.book;
 	var rendition = this.rendition;
@@ -128,6 +129,7 @@ EPUBJS.reader.ReaderController = function(book) {
 		} else {
 			hideDivider();
 		}
+
 	});
 
 	rendition.on('relocated', function(location){
@@ -137,6 +139,7 @@ EPUBJS.reader.ReaderController = function(book) {
 		if (location.atEnd) {
 			$next.addClass("disabled");
 		}
+		$pages.text(book.locations.locationFromCfi(location.start.cfi) + '/' + book.locations.total);
 	});
 
 	return {
