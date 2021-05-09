@@ -140,6 +140,7 @@ EPUBJS.reader.ReaderController = function(book) {
 			$next.addClass("disabled");
 		}
 		$pages.text(book.locations.locationFromCfi(location.start.cfi) + '/' + book.locations.total);
+		axios.post('./cfi', {cfi: location.start.cfi}).then(console.log).catch(console.error)
 	});
 
 	return {
