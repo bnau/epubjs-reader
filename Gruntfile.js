@@ -31,6 +31,7 @@ module.exports = function(grunt) {
 		copy: {
 			main: {
 				files: [
+					{src: 'node_modules/axios/dist/axios.min.js', dest:'reader/js/libs/axios.min.js'},
 					{src: 'node_modules/localforage/dist/localforage.min.js', dest: 'reader/js/libs/localforage.min.js'},
 					{src: 'libs/jszip/jszip.min.js', dest: 'reader/js/libs/zip.min.js'},
 					{src: 'node_modules/jquery/dist/jquery.min.js', dest:'reader/js/libs/jquery.min.js'},

@@ -89,11 +89,15 @@ EPUBJS.Reader = function(bookPath, _options) {
 		height: "100%"
 	});
 
-	if(this.settings.previousLocationCfi) {
-		this.displayed = this.rendition.display(this.settings.previousLocationCfi);
-	} else {
-		this.displayed = this.rendition.display();
-	}
+	axios.get('./cfi').then((function(response) {
+		this.settings.previousLocationCfi = response.data;
+	}).bind(this)).finally((function () {
+		if(this.settings.previousLocationCfi) {
+			this.displayed = this.rendition.display(this.settings.previousLocationCfi);
+		} else {
+			this.displayed = this.rendition.display();
+		}
+	}).bind(this))
 
 	book.ready.then(function () {
 		reader.ReaderController = EPUBJS.reader.ReaderController.call(reader, book);
@@ -298,15 +302,15 @@ EPUBJS.Reader.prototype.applySavedSettings = function() {
 };
 
 EPUBJS.Reader.prototype.saveSettings = function(){
-	if(this.book) {
-		this.settings.previousLocationCfi = this.rendition.currentLocation().start.cfi;
-	}
+		if(this.book) {
+			this.settings.previousLocationCfi = this.rendition.currentLocation().start.cfi;
+		}
 
-	if(!localStorage) {
-		return false;
-	}
+		if (!localStorage) {
+			return false;
+		}
 
-	localStorage.setItem(this.settings.bookKey, JSON.stringify(this.settings));
+		localStorage.setItem(this.settings.bookKey, JSON.stringify(this.settings));
 };
 
 EPUBJS.Reader.prototype.unload = function(){
