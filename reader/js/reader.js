@@ -3266,15 +3266,22 @@ EPUBJS.Reader = function(bookPath, _options) {
 		height: "100%"
 	});
 
-	axios.get('./cfi').then((function(response) {
-		this.settings.previousLocationCfi = response.data;
-	}).bind(this)).finally((function () {
+	$.ajax('./cfi', {
+		method: "get",
+		async: false,
+		error: function (xhr, status, error) {
+			console.error(error);
+		},
+		success: (function (response) {
+			this.settings.previousLocationCfi = JSON.parse(response).cfi;
+		}).bind(this)
+	})
+
 		if(this.settings.previousLocationCfi) {
 			this.displayed = this.rendition.display(this.settings.previousLocationCfi);
 		} else {
 			this.displayed = this.rendition.display();
 		}
-	}).bind(this))
 
 	book.ready.then(function () {
 		reader.ReaderController = EPUBJS.reader.ReaderController.call(reader, book);
